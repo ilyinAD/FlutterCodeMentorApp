@@ -18,6 +18,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _passwordController = TextEditingController();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
+  String _role = 'teacher';
 
   @override
   void dispose() {
@@ -33,6 +34,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     context.read<AuthCubit>().register(
           email: _emailController.text.trim(),
           password: _passwordController.text,
+          role: _role,
           firstName: _firstNameController.text.trim(),
           lastName: _lastNameController.text.trim(),
         );
@@ -63,6 +65,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+                      SegmentedButton<String>(
+                        segments: const [
+                          ButtonSegment(
+                            value: 'teacher',
+                            label: Text('Учитель'),
+                            icon: Icon(Icons.school_outlined),
+                          ),
+                          ButtonSegment(
+                            value: 'student',
+                            label: Text('Ученик'),
+                            icon: Icon(Icons.person_outlined),
+                          ),
+                        ],
+                        selected: {_role},
+                        onSelectionChanged: isLoading
+                            ? null
+                            : (s) => setState(() => _role = s.first),
+                      ),
+                      const SizedBox(height: 16),
                       TextFormField(
                         controller: _firstNameController,
                         decoration: const InputDecoration(

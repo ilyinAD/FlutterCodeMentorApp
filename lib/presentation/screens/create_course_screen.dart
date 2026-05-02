@@ -52,7 +52,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
     if (!_formKey.currentState!.validate()) return;
     if (_startDate == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Выберите дату начала')),
+        const SnackBar(content: Text('Choose start date')),
       );
       return;
     }
@@ -86,7 +86,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
     final dateFormat = DateFormat('dd.MM.yyyy');
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Новый курс')),
+      appBar: AppBar(title: const Text('New course')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -96,12 +96,12 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
             children: [
               TextFormField(
                 controller: _titleController,
-                decoration: const InputDecoration(labelText: 'Название'),
+                decoration: const InputDecoration(labelText: 'Name'),
                 validator: (v) {
                   if (v == null || v.trim().length < 3) {
-                    return 'Минимум 3 символа';
+                    return '3 characters at least';
                   }
-                  if (v.trim().length > 100) return 'Максимум 100 символов';
+                  if (v.trim().length > 100) return 'Max 100 characters';
                   return null;
                 },
               ),
@@ -109,7 +109,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
               TextFormField(
                 controller: _descriptionController,
                 decoration: const InputDecoration(
-                  labelText: 'Описание (необязательно)',
+                  labelText: 'Description (optional)',
                   alignLabelWithHint: true,
                 ),
                 maxLines: 4,
@@ -118,20 +118,20 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
               ListTile(
                 contentPadding: EdgeInsets.zero,
                 leading: const Icon(Icons.calendar_today),
-                title: const Text('Дата начала'),
+                title: const Text('Start date'),
                 subtitle: Text(_startDate != null
                     ? dateFormat.format(_startDate!)
-                    : 'Не выбрана'),
+                    : 'Not chosen'),
                 trailing: const Icon(Icons.edit),
                 onTap: () => _pickDate(isStart: true),
               ),
               ListTile(
                 contentPadding: EdgeInsets.zero,
                 leading: const Icon(Icons.calendar_today_outlined),
-                title: const Text('Дата окончания (необязательно)'),
+                title: const Text('End date (optional)'),
                 subtitle: Text(_endDate != null
                     ? dateFormat.format(_endDate!)
-                    : 'Не выбрана'),
+                    : 'Not chosen'),
                 trailing: _endDate != null
                     ? IconButton(
                         icon: const Icon(Icons.clear),
@@ -149,7 +149,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                         width: 20,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : const Text('Создать курс'),
+                    : const Text('Create course'),
               ),
             ],
           ),

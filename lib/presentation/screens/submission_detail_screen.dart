@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../../data/models/review_model.dart';
 import '../../data/models/submission_model.dart';
+import '../../data/repositories/auth_repository.dart';
 import '../../domain/cubits/submission_detail/submission_detail_cubit.dart';
 import '../../domain/cubits/submission_detail/submission_detail_state.dart';
 import '../widgets/review_feedback_card.dart';
@@ -28,6 +29,9 @@ class _SubmissionDetailScreenState extends State<SubmissionDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isStudent =
+        context.read<AuthRepository>().getCurrentUser()?.role == 'student';
+
     return Scaffold(
       appBar: AppBar(title: const Text('Посылка')),
       body:
@@ -52,16 +56,23 @@ class _SubmissionDetailScreenState extends State<SubmissionDetailScreen> {
           }
           final submission = state.submission;
           if (submission == null) return const SizedBox.shrink();
+
+          final reviewUnlocked =
+              !isStudent || submission.status == 'teacher_reviewed';
+
           return RefreshIndicator(
             onRefresh: () => context.read<SubmissionDetailCubit>().load(),
             child: ListView(
               children: [
                 _SubmissionInfo(submission: submission),
                 _CodeOrLink(submission: submission),
-                if (state.review != null)
+                if (!reviewUnlocked)
+                  const _PendingReviewCard()
+                else if (state.review != null)
                   _ReviewSection(
                     review: state.review!,
                     saving: state.submittingAction,
+                    readOnly: isStudent,
                   )
                 else
                   const Padding(
@@ -79,10 +90,13 @@ class _SubmissionDetailScreenState extends State<SubmissionDetailScreen> {
                       ),
                     ),
                   ),
-                _GradeSection(
-                  submission: submission,
-                  saving: state.submittingAction,
-                ),
+                if (isStudent)
+                  _StudentGradeView(submission: submission)
+                else
+                  _GradeSection(
+                    submission: submission,
+                    saving: state.submittingAction,
+                  ),
                 const SizedBox(height: 32),
               ],
             ),
@@ -117,24 +131,24 @@ class _SubmissionInfo extends StatelessWidget {
                   const SizedBox(width: 8),
                   Text(
                     submission.studentName ??
-                        'Ученик #${submission.userId}',
+                        'Student #${submission.userId}',
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ],
               ),
               const SizedBox(height: 8),
               Text(
-                'Статус: ${_statusLabel(submission.status)}',
+                'Status: ${_statusLabel(submission.status)}',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               if (submission.createdAt != null)
                 Text(
-                  'Отправлено: ${dateFormat.format(submission.createdAt!)}',
+                  'Sent: ${dateFormat.format(submission.createdAt!)}',
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
               if (submission.score != null)
                 Text(
-                  'Текущая оценка: ${submission.score!.toStringAsFixed(1)}',
+                  'Current score: ${submission.score!.toStringAsFixed(1)}',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: cs.primary,
                         fontWeight: FontWeight.w600,
@@ -149,9 +163,9 @@ class _SubmissionInfo extends StatelessWidget {
 
   String _statusLabel(String status) {
     return switch (status) {
-      'pending' => 'Ожидает проверки',
-      'ai_reviewed' => 'AI-ревью готово',
-      'teacher_reviewed' => 'Проверено учителем',
+      'pending' => 'Pending',
+      'ai_reviewed' => 'AI review is ready',
+      'teacher_reviewed' => 'Reviewed by teacher',
       _ => status,
     };
   }
@@ -173,7 +187,7 @@ class _CodeOrLink extends StatelessWidget {
         child: Card(
           child: ListTile(
             leading: const Icon(Icons.link),
-            title: const Text('Репозиторий на GitHub'),
+            title: const Text('GitHub repository link'),
             subtitle: SelectableText(submission.githubUrl!),
           ),
         ),
@@ -190,7 +204,7 @@ class _CodeOrLink extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Код', style: Theme.of(context).textTheme.titleSmall),
+              Text('Code', style: Theme.of(context).textTheme.titleSmall),
               const SizedBox(height: 8),
               Container(
                 width: double.infinity,
@@ -213,11 +227,97 @@ class _CodeOrLink extends StatelessWidget {
   }
 }
 
+class _PendingReviewCard extends StatelessWidget {
+  const _PendingReviewCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Icon(Icons.hourglass_empty, color: cs.outline),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Await teacher review',
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Review will be ready after teacher check your submission',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: cs.outline,
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _StudentGradeView extends StatelessWidget {
+  final SubmissionModel submission;
+
+  const _StudentGradeView({required this.submission});
+
+  @override
+  Widget build(BuildContext context) {
+    if (submission.score == null) return const SizedBox.shrink();
+    final cs = Theme.of(context).colorScheme;
+
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Icon(Icons.verified, color: cs.tertiary),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  'Итоговая оценка',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ),
+              Text(
+                submission.score!.toStringAsFixed(1),
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      color: cs.primary,
+                      fontWeight: FontWeight.w700,
+                    ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _ReviewSection extends StatelessWidget {
   final CodeReviewModel review;
   final bool saving;
+  final bool readOnly;
 
-  const _ReviewSection({required this.review, required this.saving});
+  const _ReviewSection({
+    required this.review,
+    required this.saving,
+    this.readOnly = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -280,54 +380,74 @@ class _ReviewSection extends StatelessWidget {
             ),
           ),
         ),
-        if (review.feedbacks.isEmpty)
-          const Padding(
-            padding: EdgeInsets.all(16),
-            child: Text('Замечаний нет'),
-          )
-        else
-          ...review.feedbacks.map((f) => ReviewFeedbackCard(
-                feedback: f,
-                saving: saving,
-                onToggleApproved: (approved) => context
-                    .read<SubmissionDetailCubit>()
-                    .applyFeedbackAction(
-                      feedbackId: f.id,
-                      approved: approved,
-                    ),
-                onSaveComment: (comment) => context
-                    .read<SubmissionDetailCubit>()
-                    .applyFeedbackAction(
-                      feedbackId: f.id,
-                      comment: comment,
-                    ),
-              )),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: OutlinedButton.icon(
-            onPressed: saving
-                ? null
-                : () async {
-                    final data = await showDialog<TeacherFeedbackData>(
-                      context: context,
-                      builder: (_) => const TeacherFeedbackDialog(),
-                    );
-                    if (data == null || !context.mounted) return;
-                    context.read<SubmissionDetailCubit>().addTeacherFeedback(
-                          description: data.description,
-                          severity: data.severity,
-                          feedbackType: data.feedbackType,
-                          filePath: data.filePath,
-                          lineStart: data.lineStart,
-                          lineEnd: data.lineEnd,
-                          codeSnippet: data.codeSnippet,
-                          suggestedFix: data.suggestedFix,
-                        );
-                  },
-            icon: const Icon(Icons.add_comment_outlined),
-            label: const Text('Добавить свой фидбек'),
+        Builder(builder: (context) {
+          final visibleFeedbacks = readOnly
+              ? review.feedbacks
+                  .where((f) => f.teacherApproved == true)
+                  .toList()
+              : review.feedbacks;
+          if (visibleFeedbacks.isEmpty) {
+            return const Padding(
+              padding: EdgeInsets.all(16),
+              child: Text('Замечаний нет'),
+            );
+          }
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: visibleFeedbacks
+                .map((f) => ReviewFeedbackCard(
+                      feedback: f,
+                      saving: saving,
+                      readOnly: readOnly,
+                      onToggleApproved: readOnly
+                          ? null
+                          : (approved) => context
+                              .read<SubmissionDetailCubit>()
+                              .applyFeedbackAction(
+                                feedbackId: f.id,
+                                approved: approved,
+                              ),
+                      onSaveComment: readOnly
+                          ? null
+                          : (comment) => context
+                              .read<SubmissionDetailCubit>()
+                              .applyFeedbackAction(
+                                feedbackId: f.id,
+                                comment: comment,
+                              ),
+                    ))
+                .toList(),
+          );
+        }),
+        if (!readOnly)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: OutlinedButton.icon(
+              onPressed: saving
+                  ? null
+                  : () async {
+                      final data = await showDialog<TeacherFeedbackData>(
+                        context: context,
+                        builder: (_) => const TeacherFeedbackDialog(),
+                      );
+                      if (data == null || !context.mounted) return;
+                      context
+                          .read<SubmissionDetailCubit>()
+                          .addTeacherFeedback(
+                            description: data.description,
+                            severity: data.severity,
+                            feedbackType: data.feedbackType,
+                            filePath: data.filePath,
+                            lineStart: data.lineStart,
+                            lineEnd: data.lineEnd,
+                            codeSnippet: data.codeSnippet,
+                            suggestedFix: data.suggestedFix,
+                          );
+                    },
+              icon: const Icon(Icons.add_comment_outlined),
+              label: const Text('Добавить свой фидбек'),
+            ),
           ),
-        ),
       ],
     );
   }

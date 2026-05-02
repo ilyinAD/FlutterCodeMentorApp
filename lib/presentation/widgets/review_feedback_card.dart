@@ -5,15 +5,17 @@ import '../../data/models/review_model.dart';
 class ReviewFeedbackCard extends StatefulWidget {
   final ReviewFeedbackModel feedback;
   final bool saving;
-  final void Function(bool approved) onToggleApproved;
-  final void Function(String comment) onSaveComment;
+  final bool readOnly;
+  final void Function(bool approved)? onToggleApproved;
+  final void Function(String comment)? onSaveComment;
 
   const ReviewFeedbackCard({
     super.key,
     required this.feedback,
     required this.saving,
-    required this.onToggleApproved,
-    required this.onSaveComment,
+    this.readOnly = false,
+    this.onToggleApproved,
+    this.onSaveComment,
   });
 
   @override
@@ -152,59 +154,87 @@ class _ReviewFeedbackCardState extends State<ReviewFeedbackCard> {
                 ],
               ),
             ],
-            const Divider(height: 24),
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton.icon(
-                    onPressed: widget.saving
-                        ? null
-                        : () => widget.onToggleApproved(true),
-                    icon: const Icon(Icons.check, size: 18),
-                    label: const Text('Принять'),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: f.teacherApproved == true
-                          ? cs.tertiary
-                          : cs.onSurface,
-                    ),
+            if (widget.readOnly) ...[
+              if (f.teacherComment != null && f.teacherComment!.isNotEmpty) ...[
+                const SizedBox(height: 12),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: cs.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(6),
                   ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: OutlinedButton.icon(
-                    onPressed: widget.saving
-                        ? null
-                        : () => widget.onToggleApproved(false),
-                    icon: const Icon(Icons.close, size: 18),
-                    label: const Text('Отклонить'),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: f.teacherApproved == false
-                          ? cs.error
-                          : cs.onSurface,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Комментарий учителя',
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                              color: cs.outline,
+                            ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(f.teacherComment!),
+                    ],
                   ),
                 ),
               ],
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: _commentController,
-              decoration: InputDecoration(
-                labelText: 'Комментарий учителя',
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.save),
-                  onPressed: widget.saving
-                      ? null
-                      : () {
-                          widget.onSaveComment(_commentController.text.trim());
-                          setState(() => _editingComment = false);
-                          FocusScope.of(context).unfocus();
-                        },
-                ),
+            ] else ...[
+              const Divider(height: 24),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: widget.saving
+                          ? null
+                          : () => widget.onToggleApproved?.call(true),
+                      icon: const Icon(Icons.check, size: 18),
+                      label: const Text('Принять'),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: f.teacherApproved == true
+                            ? cs.tertiary
+                            : cs.onSurface,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: widget.saving
+                          ? null
+                          : () => widget.onToggleApproved?.call(false),
+                      icon: const Icon(Icons.close, size: 18),
+                      label: const Text('Отклонить'),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: f.teacherApproved == false
+                            ? cs.error
+                            : cs.onSurface,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              maxLines: 2,
-              onChanged: (_) => _editingComment = true,
-            ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: _commentController,
+                decoration: InputDecoration(
+                  labelText: 'Комментарий учителя',
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.save),
+                    onPressed: widget.saving
+                        ? null
+                        : () {
+                            widget.onSaveComment
+                                ?.call(_commentController.text.trim());
+                            setState(() => _editingComment = false);
+                            FocusScope.of(context).unfocus();
+                          },
+                  ),
+                ),
+                maxLines: 2,
+                onChanged: (_) => _editingComment = true,
+              ),
+            ],
           ],
         ),
       ),

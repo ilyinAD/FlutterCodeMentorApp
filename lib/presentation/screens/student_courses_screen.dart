@@ -3,50 +3,50 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../domain/cubits/auth/auth_cubit.dart';
-import '../../domain/cubits/courses/courses_cubit.dart';
-import '../../domain/cubits/courses/courses_state.dart';
+import '../../domain/cubits/student_courses/student_courses_cubit.dart';
+import '../../domain/cubits/student_courses/student_courses_state.dart';
 import '../widgets/course_card.dart';
 
-class CoursesScreen extends StatefulWidget {
-  const CoursesScreen({super.key});
+class StudentCoursesScreen extends StatefulWidget {
+  const StudentCoursesScreen({super.key});
 
   @override
-  State<CoursesScreen> createState() => _CoursesScreenState();
+  State<StudentCoursesScreen> createState() => _StudentCoursesScreenState();
 }
 
-class _CoursesScreenState extends State<CoursesScreen> {
+class _StudentCoursesScreenState extends State<StudentCoursesScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<CoursesCubit>().loadCourses();
+    context.read<StudentCoursesCubit>().load();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My courses'),
+        title: const Text('Мои курсы'),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
-            tooltip: 'Exit',
+            tooltip: 'Выйти',
             onPressed: () => context.read<AuthCubit>().logout(),
           ),
         ],
       ),
-      body: BlocBuilder<CoursesCubit, CoursesState>(
+      body: BlocBuilder<StudentCoursesCubit, StudentCoursesState>(
         builder: (context, state) {
           return switch (state) {
-            CoursesInitial() || CoursesLoading() =>
+            StudentCoursesInitial() || StudentCoursesLoading() =>
               const Center(child: CircularProgressIndicator()),
-            CoursesError(:final message) => _ErrorView(
+            StudentCoursesError(:final message) => _ErrorView(
                 message: message,
-                onRetry: () => context.read<CoursesCubit>().loadCourses(),
+                onRetry: () => context.read<StudentCoursesCubit>().load(),
               ),
-            CoursesLoaded(:final courses) when courses.isEmpty =>
+            StudentCoursesLoaded(:final courses) when courses.isEmpty =>
               const _EmptyView(),
-            CoursesLoaded(:final courses) => RefreshIndicator(
-                onRefresh: () => context.read<CoursesCubit>().loadCourses(),
+            StudentCoursesLoaded(:final courses) => RefreshIndicator(
+                onRefresh: () => context.read<StudentCoursesCubit>().load(),
                 child: ListView.builder(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   itemCount: courses.length,
@@ -55,7 +55,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
                     return CourseCard(
                       course: course,
                       onTap: () =>
-                          context.push('/courses/${course.courseId}'),
+                          context.push('/student/courses/${course.courseId}'),
                     );
                   },
                 ),
@@ -65,13 +65,13 @@ class _CoursesScreenState extends State<CoursesScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
-          await context.push('/courses/create');
+          await context.push('/student/courses/join');
           if (context.mounted) {
-            context.read<CoursesCubit>().loadCourses();
+            context.read<StudentCoursesCubit>().load();
           }
         },
         icon: const Icon(Icons.add),
-        label: const Text('New course'),
+        label: const Text('Присоединиться'),
       ),
     );
   }
@@ -90,12 +90,12 @@ class _EmptyView extends StatelessWidget {
               size: 64, color: Theme.of(context).colorScheme.outline),
           const SizedBox(height: 16),
           Text(
-            'No courses yet',
+            'Вы пока не присоединились ни к одному курсу',
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 8),
           Text(
-            'Press button below to create your first course',
+            'Введите код курса от преподавателя',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.outline,
                 ),
@@ -127,7 +127,7 @@ class _ErrorView extends StatelessWidget {
             const SizedBox(height: 16),
             FilledButton(
               onPressed: onRetry,
-              child: const Text('Repeat'),
+              child: const Text('Повторить'),
             ),
           ],
         ),

@@ -4,29 +4,48 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../data/models/task_model.dart';
+import '../../data/repositories/auth_repository.dart';
+import '../../data/repositories/submission_repository.dart';
 import '../../data/repositories/task_repository.dart';
 import '../../domain/cubits/submissions/submissions_cubit.dart';
 import '../../domain/cubits/submissions/submissions_state.dart';
 import '../widgets/criteria_list.dart';
 import '../widgets/submission_tile.dart';
 
-class SubmissionsScreen extends StatefulWidget {
+class StudentTaskDetailScreen extends StatelessWidget {
   final int taskId;
 
-  const SubmissionsScreen({super.key, required this.taskId});
+  const StudentTaskDetailScreen({super.key, required this.taskId});
 
   @override
-  State<SubmissionsScreen> createState() => _SubmissionsScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (ctx) => SubmissionsCubit(
+        ctx.read<SubmissionRepository>(),
+        taskId,
+        studentId: ctx.read<AuthRepository>().getCurrentUser()?.userId,
+      )..load(),
+      child: _StudentTaskDetailView(taskId: taskId),
+    );
+  }
 }
 
-class _SubmissionsScreenState extends State<SubmissionsScreen> {
+class _StudentTaskDetailView extends StatefulWidget {
+  final int taskId;
+
+  const _StudentTaskDetailView({required this.taskId});
+
+  @override
+  State<_StudentTaskDetailView> createState() => _StudentTaskDetailViewState();
+}
+
+class _StudentTaskDetailViewState extends State<_StudentTaskDetailView> {
   late Future<TaskModel> _taskFuture;
 
   @override
   void initState() {
     super.initState();
     _taskFuture = context.read<TaskRepository>().getTask(widget.taskId);
-    context.read<SubmissionsCubit>().load();
   }
 
   Future<void> _refresh() async {
@@ -39,11 +58,11 @@ class _SubmissionsScreenState extends State<SubmissionsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Задача и посылки')),
+      appBar: AppBar(title: const Text('Задача')),
       body: RefreshIndicator(
         onRefresh: _refresh,
         child: ListView(
-          padding: const EdgeInsets.only(bottom: 24),
+          padding: const EdgeInsets.only(bottom: 96),
           children: [
             FutureBuilder<TaskModel>(
               future: _taskFuture,
@@ -83,7 +102,7 @@ class _SubmissionsScreenState extends State<SubmissionsScreen> {
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               child: Text(
-                'Посылки',
+                'Мои посылки',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
             ),
@@ -96,32 +115,17 @@ class _SubmissionsScreenState extends State<SubmissionsScreen> {
                     ),
                   SubmissionsError(:final message) => Padding(
                       padding: const EdgeInsets.all(24),
-                      child: Column(
-                        children: [
-                          Text(message, textAlign: TextAlign.center),
-                          const SizedBox(height: 12),
-                          FilledButton(
-                            onPressed: () =>
-                                context.read<SubmissionsCubit>().load(),
-                            child: const Text('Повторить'),
-                          ),
-                        ],
-                      ),
+                      child: Text(message),
                     ),
                   SubmissionsLoaded(:final submissions)
                       when submissions.isEmpty =>
-                    const _EmptyView(),
+                    const _EmptySubmissions(),
                   SubmissionsLoaded(:final submissions) => Column(
                       children: submissions
                           .map((s) => SubmissionTile(
                                 submission: s,
-                                onTap: () async {
-                                  await context
-                                      .push('/submissions/${s.submissionId}');
-                                  if (context.mounted) {
-                                    context.read<SubmissionsCubit>().load();
-                                  }
-                                },
+                                onTap: () =>
+                                    context.push('/submissions/${s.submissionId}'),
                               ))
                           .toList(),
                     ),
@@ -130,6 +134,16 @@ class _SubmissionsScreenState extends State<SubmissionsScreen> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () async {
+          await context.push('/student/tasks/${widget.taskId}/submit');
+          if (context.mounted) {
+            await context.read<SubmissionsCubit>().load();
+          }
+        },
+        icon: const Icon(Icons.upload_file),
+        label: const Text('Отправить решение'),
       ),
     );
   }
@@ -182,7 +196,8 @@ class _TaskInfo extends StatelessWidget {
           const SizedBox(height: 6),
           Row(
             children: [
-              Icon(Icons.star_outline, size: 16, color: colorScheme.outline),
+              Icon(Icons.star_outline,
+                  size: 16, color: colorScheme.outline),
               const SizedBox(width: 6),
               Text(
                 'Максимум ${task.maxScore} баллов',
@@ -198,23 +213,19 @@ class _TaskInfo extends StatelessWidget {
   }
 }
 
-class _EmptyView extends StatelessWidget {
-  const _EmptyView();
+class _EmptySubmissions extends StatelessWidget {
+  const _EmptySubmissions();
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(32),
+      padding: const EdgeInsets.all(24),
       child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.inbox_outlined,
-                size: 48, color: Theme.of(context).colorScheme.outline),
-            const SizedBox(height: 12),
-            Text('Посылок пока нет',
-                style: Theme.of(context).textTheme.titleSmall),
-          ],
+        child: Text(
+          'Вы ещё не отправляли решения',
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.outline,
+              ),
         ),
       ),
     );

@@ -15,6 +15,25 @@ class CourseApi {
         .toList();
   }
 
+  Future<List<CourseModel>> getStudentCourses(int studentId) async {
+    final response =
+        await _dio.get('/courses', queryParameters: {'student_id': studentId});
+    final list = response.data as List<dynamic>;
+    return list
+        .map((e) => CourseModel.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
+  Future<void> enrollStudent({
+    required int courseId,
+    required int studentId,
+  }) async {
+    await _dio.post(
+      '/courses/$courseId/enrollments',
+      data: {'student_id': studentId},
+    );
+  }
+
   Future<CourseModel> getCourse(int courseId) async {
     final response = await _dio.get('/courses/$courseId');
     return CourseModel.fromJson(response.data as Map<String, dynamic>);

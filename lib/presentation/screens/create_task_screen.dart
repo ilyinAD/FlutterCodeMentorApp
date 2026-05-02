@@ -67,7 +67,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
     final dateFormat = DateFormat('dd.MM.yyyy HH:mm');
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Новая задача')),
+      appBar: AppBar(title: const Text('New task')),
       body: BlocConsumer<TaskFormCubit, TaskFormState>(
         listener: (context, state) {
           if (state.success) {
@@ -88,12 +88,12 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                 children: [
                   TextFormField(
                     controller: _titleController,
-                    decoration: const InputDecoration(labelText: 'Название'),
+                    decoration: const InputDecoration(labelText: 'Name'),
                     validator: (v) {
                       if (v == null || v.trim().length < 5) {
-                        return 'Минимум 5 символов';
+                        return 'At least 5 characters';
                       }
-                      if (v.trim().length > 100) return 'Максимум 100 символов';
+                      if (v.trim().length > 100) return 'Max 100 characters';
                       return null;
                     },
                   ),
@@ -101,13 +101,13 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                   TextFormField(
                     controller: _descriptionController,
                     decoration: const InputDecoration(
-                      labelText: 'Описание',
+                      labelText: 'Description',
                       alignLabelWithHint: true,
                     ),
                     maxLines: 5,
                     validator: (v) {
                       if (v == null || v.trim().length < 10) {
-                        return 'Минимум 10 символов';
+                        return 'At least 10 characters';
                       }
                       return null;
                     },
@@ -116,10 +116,10 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     leading: const Icon(Icons.schedule),
-                    title: const Text('Дедлайн'),
+                    title: const Text('Deadline'),
                     subtitle: Text(_deadline != null
                         ? dateFormat.format(_deadline!)
-                        : 'Не выбран'),
+                        : 'Not chosen'),
                     trailing: const Icon(Icons.edit),
                     onTap: _pickDeadline,
                   ),
@@ -127,20 +127,20 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                   TextFormField(
                     controller: _maxScoreController,
                     decoration: const InputDecoration(
-                      labelText: 'Максимальный балл',
+                      labelText: 'Max score',
                     ),
                     keyboardType: TextInputType.number,
                     validator: (v) {
                       final n = int.tryParse(v ?? '');
                       if (n == null || n < 1 || n > 100) {
-                        return 'Число от 1 до 100';
+                        return 'Number from 1 to 100';
                       }
                       return null;
                     },
                   ),
                   const SizedBox(height: 24),
                   Text(
-                    'Критерии оценки',
+                    'Criteries',
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 8),
@@ -148,7 +148,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       child: Text(
-                        'Критерии необязательны. Без них AI-ревью будет оценивать общее качество кода.',
+                        'Criteries are optional. Without them ai will assess general quality of code.',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               color: Theme.of(context).colorScheme.outline,
                             ),
@@ -171,7 +171,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                     onPressed: () =>
                         context.read<TaskFormCubit>().addCriterion(),
                     icon: const Icon(Icons.add),
-                    label: const Text('Добавить критерий'),
+                    label: const Text('Add criteria'),
                   ),
                   const SizedBox(height: 24),
                   FilledButton(
@@ -182,7 +182,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                             width: 20,
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
-                        : const Text('Создать задачу'),
+                        : const Text('Create task'),
                   ),
                 ],
               ),

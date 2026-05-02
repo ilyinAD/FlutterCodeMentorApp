@@ -46,6 +46,26 @@ class CourseRepository {
     }
   }
 
+  Future<CourseModel> joinCourse(int studentId, int courseId) async {
+    try {
+      await _api.enrollStudent(courseId: courseId, studentId: studentId);
+      return await _api.getCourse(courseId);
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        throw 'Курс с таким кодом не найден';
+      }
+      throw _mapError(e);
+    }
+  }
+
+  Future<List<CourseModel>> getStudentCourses(int studentId) async {
+    try {
+      return await _api.getStudentCourses(studentId);
+    } on DioException catch (e) {
+      throw _mapError(e);
+    }
+  }
+
   String _mapError(DioException e) {
     if (e.response?.data is Map<String, dynamic>) {
       return ApiErrorModel.fromJson(e.response!.data as Map<String, dynamic>)

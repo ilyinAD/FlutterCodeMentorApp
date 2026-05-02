@@ -27,7 +27,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Курс')),
+      appBar: AppBar(title: const Text('Course')),
       body: BlocBuilder<CourseDetailCubit, CourseDetailState>(
         builder: (context, state) {
           return switch (state) {
@@ -49,7 +49,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                       child: Padding(
                         padding:
                             EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        child: Text('Задачи',
+                        child: Text('Tasks',
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.w600)),
                       ),
@@ -89,7 +89,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
           }
         },
         icon: const Icon(Icons.add_task),
-        label: const Text('Новая задача'),
+        label: const Text('New task'),
       ),
     );
   }
@@ -156,7 +156,7 @@ class _EmptyTasks extends StatelessWidget {
             Icon(Icons.assignment_outlined,
                 size: 48, color: Theme.of(context).colorScheme.outline),
             const SizedBox(height: 12),
-            Text('В курсе ещё нет задач',
+            Text('No tasks yet',
                 style: Theme.of(context).textTheme.titleSmall),
           ],
         ),
@@ -184,7 +184,7 @@ class _ErrorView extends StatelessWidget {
             const SizedBox(height: 16),
             Text(message, textAlign: TextAlign.center),
             const SizedBox(height: 16),
-            FilledButton(onPressed: onRetry, child: const Text('Повторить')),
+            FilledButton(onPressed: onRetry, child: const Text('Repeat')),
           ],
         ),
       ),

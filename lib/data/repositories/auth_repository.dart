@@ -24,6 +24,7 @@ class AuthRepository {
   Future<UserModel> register({
     required String email,
     required String password,
+    required String role,
     required String firstName,
     required String lastName,
   }) async {
@@ -31,6 +32,7 @@ class AuthRepository {
       final user = await _api.register(
         email: email,
         password: password,
+        role: role,
         firstName: firstName,
         lastName: lastName,
       );

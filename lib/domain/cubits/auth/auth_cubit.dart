@@ -29,6 +29,7 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> register({
     required String email,
     required String password,
+    required String role,
     required String firstName,
     required String lastName,
   }) async {
@@ -37,6 +38,7 @@ class AuthCubit extends Cubit<AuthState> {
       final user = await _repository.register(
         email: email,
         password: password,
+        role: role,
         firstName: firstName,
         lastName: lastName,
       );

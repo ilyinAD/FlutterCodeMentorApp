@@ -17,13 +17,14 @@ class AuthApi {
   Future<UserModel> register({
     required String email,
     required String password,
+    required String role,
     required String firstName,
     required String lastName,
   }) async {
     final response = await _dio.post('/user', data: {
       'email': email,
       'password': password,
-      'role': 'teacher',
+      'role': role,
       'first_name': firstName,
       'last_name': lastName,
     });

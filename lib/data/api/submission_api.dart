@@ -6,8 +6,16 @@ class SubmissionApi {
 
   SubmissionApi(this._dio);
 
-  Future<List<SubmissionModel>> getTaskSubmissions(int taskId) async {
-    final response = await _dio.get('/tasks/$taskId/submissions');
+  Future<List<SubmissionModel>> getTaskSubmissions(
+    int taskId, {
+    int? studentId,
+  }) async {
+    final response = await _dio.get(
+      '/tasks/$taskId/submissions',
+      queryParameters: {
+        'student_id': ?studentId,
+      },
+    );
     final list = response.data as List<dynamic>;
     return list
         .map((e) => SubmissionModel.fromJson(e as Map<String, dynamic>))
@@ -38,6 +46,22 @@ class SubmissionApi {
   }) async {
     await _dio.put('/submissions/$submissionId/grade', data: {
       'score': grade,
+    });
+  }
+
+  Future<void> createSubmission({
+    required int taskId,
+    required int userId,
+    required String submissionType,
+    String? code,
+    String? githubUrl,
+  }) async {
+    await _dio.post('/submission', data: {
+      'task_id': taskId,
+      'user_id': userId,
+      'submission_type': submissionType,
+      'code': ?code,
+      'github_url': ?githubUrl,
     });
   }
 }
