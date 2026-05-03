@@ -52,7 +52,7 @@ class CourseRepository {
       return await _api.getCourse(courseId);
     } on DioException catch (e) {
       if (e.response?.statusCode == 404) {
-        throw 'Курс с таким кодом не найден';
+        throw 'Course with this code not found';
       }
       throw _mapError(e);
     }
@@ -72,8 +72,8 @@ class CourseRepository {
           .error;
     }
     if (e.type == DioExceptionType.connectionError) {
-      return 'Нет соединения с сервером.';
+      return 'No connection to the server.';
     }
-    return 'Произошла ошибка: ${e.message}';
+    return 'An error occurred: ${e.message}';
   }
 }

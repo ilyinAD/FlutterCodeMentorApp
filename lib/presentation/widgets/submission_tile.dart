@@ -32,7 +32,7 @@ class SubmissionTile extends StatelessWidget {
           ),
         ),
         title: Text(
-          submission.studentName ?? 'Ученик #${submission.userId}',
+          submission.studentName ?? 'Student #${submission.userId}',
           style: Theme.of(context).textTheme.titleSmall,
         ),
         subtitle: Column(
@@ -57,7 +57,7 @@ class SubmissionTile extends StatelessWidget {
                     submission.score!.toStringAsFixed(1),
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
-                  Text('балл',
+                  Text('pts',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: colorScheme.outline,
                           )),
@@ -88,9 +88,9 @@ class SubmissionTile extends StatelessWidget {
 
   String _statusLabel(String status) {
     return switch (status) {
-      'pending' => 'Ожидает проверки',
-      'ai_reviewed' => 'AI-ревью готово',
-      'teacher_reviewed' => 'Проверено учителем',
+      'pending' => 'Pending review',
+      'ai_reviewed' => 'AI review ready',
+      'teacher_reviewed' => 'Reviewed by teacher',
       _ => status,
     };
   }

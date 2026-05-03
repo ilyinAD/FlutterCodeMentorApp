@@ -45,7 +45,7 @@ class _SubmitSolutionScreenState extends State<SubmitSolutionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Отправить решение')),
+      appBar: AppBar(title: const Text('Submit solution')),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -53,7 +53,7 @@ class _SubmitSolutionScreenState extends State<SubmitSolutionScreen> {
             listener: (context, state) {
               if (state is SubmitSolutionSuccess) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Решение отправлено')),
+                  const SnackBar(content: Text('Solution sent')),
                 );
                 context.pop();
               } else if (state is SubmitSolutionError) {
@@ -73,7 +73,7 @@ class _SubmitSolutionScreenState extends State<SubmitSolutionScreen> {
                       segments: const [
                         ButtonSegment(
                           value: 'code',
-                          label: Text('Код'),
+                          label: Text('Code'),
                           icon: Icon(Icons.code),
                         ),
                         ButtonSegment(
@@ -92,7 +92,7 @@ class _SubmitSolutionScreenState extends State<SubmitSolutionScreen> {
                       TextFormField(
                         controller: _codeController,
                         decoration: const InputDecoration(
-                          labelText: 'Код решения',
+                          labelText: 'Solution code',
                           alignLabelWithHint: true,
                         ),
                         minLines: 8,
@@ -101,7 +101,7 @@ class _SubmitSolutionScreenState extends State<SubmitSolutionScreen> {
                         textInputAction: TextInputAction.newline,
                         validator: (v) {
                           if (v == null || v.trim().isEmpty) {
-                            return 'Введите код';
+                            return 'Enter the code';
                           }
                           return null;
                         },
@@ -110,16 +110,16 @@ class _SubmitSolutionScreenState extends State<SubmitSolutionScreen> {
                       TextFormField(
                         controller: _githubController,
                         decoration: const InputDecoration(
-                          labelText: 'Ссылка на репозиторий',
+                          labelText: 'Repository link',
                           hintText: 'https://github.com/user/repo',
                           prefixIcon: Icon(Icons.link),
                         ),
                         keyboardType: TextInputType.url,
                         validator: (v) {
                           final value = v?.trim() ?? '';
-                          if (value.isEmpty) return 'Введите ссылку';
+                          if (value.isEmpty) return 'Enter the link';
                           if (!_githubRegex.hasMatch(value)) {
-                            return 'Ссылка вида https://github.com/user/repo';
+                            return 'Link must look like https://github.com/user/repo';
                           }
                           return null;
                         },
@@ -133,7 +133,7 @@ class _SubmitSolutionScreenState extends State<SubmitSolutionScreen> {
                               width: 20,
                               child: CircularProgressIndicator(strokeWidth: 2),
                             )
-                          : const Text('Отправить'),
+                          : const Text('Submit'),
                     ),
                   ],
                 ),

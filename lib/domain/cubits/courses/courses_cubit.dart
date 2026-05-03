@@ -15,7 +15,7 @@ class CoursesCubit extends Cubit<CoursesState> {
   Future<void> loadCourses() async {
     final teacherId = _teacherId;
     if (teacherId == null) {
-      emit(const CoursesError('Вы не авторизованы'));
+      emit(const CoursesError('You are not signed in'));
       return;
     }
     emit(const CoursesLoading());
@@ -35,7 +35,7 @@ class CoursesCubit extends Cubit<CoursesState> {
   }) async {
     final teacherId = _teacherId;
     if (teacherId == null) {
-      emit(const CoursesError('Вы не авторизованы'));
+      emit(const CoursesError('You are not signed in'));
       return;
     }
     try {

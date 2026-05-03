@@ -51,12 +51,12 @@ class SubmissionDetailCubit extends Cubit<SubmissionDetailState> {
       emit(state.copyWith(
         submittingAction: false,
         review: review,
-        actionMessage: 'Сохранено',
+        actionMessage: 'Saved',
       ));
     } catch (e) {
       emit(state.copyWith(
         submittingAction: false,
-        actionMessage: 'Ошибка: $e',
+        actionMessage: 'Error: $e',
       ));
     }
   }
@@ -95,12 +95,12 @@ class SubmissionDetailCubit extends Cubit<SubmissionDetailState> {
       emit(state.copyWith(
         submittingAction: false,
         review: review,
-        actionMessage: 'Фидбек добавлен',
+        actionMessage: 'Feedback added',
       ));
     } catch (e) {
       emit(state.copyWith(
         submittingAction: false,
-        actionMessage: 'Ошибка: $e',
+        actionMessage: 'Error: $e',
       ));
     }
   }
@@ -117,12 +117,12 @@ class SubmissionDetailCubit extends Cubit<SubmissionDetailState> {
       emit(state.copyWith(
         submittingAction: false,
         submission: submission,
-        actionMessage: 'Оценка выставлена',
+        actionMessage: 'Grade submitted',
       ));
     } catch (e) {
       emit(state.copyWith(
         submittingAction: false,
-        actionMessage: 'Ошибка: $e',
+        actionMessage: 'Error: $e',
       ));
     }
   }

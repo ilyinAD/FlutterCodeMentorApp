@@ -104,7 +104,7 @@ class _ReviewFeedbackCardState extends State<ReviewFeedbackCard> {
                 [
                   if (f.filePath != null) f.filePath,
                   if (f.lineStart != null)
-                    'строк${f.lineEnd != null ? 'и' : 'а'} ${f.lineStart}${f.lineEnd != null ? '-${f.lineEnd}' : ''}',
+                    'line${f.lineEnd != null ? 's' : ''} ${f.lineStart}${f.lineEnd != null ? '-${f.lineEnd}' : ''}',
                 ].join(' · '),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: cs.outline,
@@ -136,7 +136,7 @@ class _ReviewFeedbackCardState extends State<ReviewFeedbackCard> {
               ExpansionTile(
                 tilePadding: EdgeInsets.zero,
                 childrenPadding: const EdgeInsets.only(bottom: 8),
-                title: const Text('Предлагаемое исправление'),
+                title: const Text('Suggested fix'),
                 children: [
                   Container(
                     width: double.infinity,
@@ -168,7 +168,7 @@ class _ReviewFeedbackCardState extends State<ReviewFeedbackCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Комментарий учителя',
+                        'Teacher comment',
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
                               color: cs.outline,
                             ),
@@ -189,7 +189,7 @@ class _ReviewFeedbackCardState extends State<ReviewFeedbackCard> {
                           ? null
                           : () => widget.onToggleApproved?.call(true),
                       icon: const Icon(Icons.check, size: 18),
-                      label: const Text('Принять'),
+                      label: const Text('Approve'),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: f.teacherApproved == true
                             ? cs.tertiary
@@ -204,7 +204,7 @@ class _ReviewFeedbackCardState extends State<ReviewFeedbackCard> {
                           ? null
                           : () => widget.onToggleApproved?.call(false),
                       icon: const Icon(Icons.close, size: 18),
-                      label: const Text('Отклонить'),
+                      label: const Text('Reject'),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: f.teacherApproved == false
                             ? cs.error
@@ -218,7 +218,7 @@ class _ReviewFeedbackCardState extends State<ReviewFeedbackCard> {
               TextField(
                 controller: _commentController,
                 decoration: InputDecoration(
-                  labelText: 'Комментарий учителя',
+                  labelText: 'Teacher comment',
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.save),
                     onPressed: widget.saving
@@ -254,11 +254,11 @@ class _ReviewFeedbackCardState extends State<ReviewFeedbackCard> {
 
   String _severityLabel(int severity) {
     return switch (severity) {
-      1 => 'Инфо',
-      2 => 'Низкая',
-      3 => 'Средняя',
-      4 => 'Высокая',
-      5 => 'Критическая',
+      1 => 'Info',
+      2 => 'Low',
+      3 => 'Medium',
+      4 => 'High',
+      5 => 'Critical',
       _ => 'Severity $severity',
     };
   }

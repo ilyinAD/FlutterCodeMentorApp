@@ -42,7 +42,7 @@ class CourseCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      course.isActive ? 'Активный' : 'Архив',
+                      course.isActive ? 'Active' : 'Archived',
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
                             color: course.isActive
                                 ? colorScheme.onPrimaryContainer
@@ -73,7 +73,7 @@ class CourseCard extends StatelessWidget {
                   Text(
                     course.endDate != null
                         ? '${dateFormat.format(course.startDate)} — ${dateFormat.format(course.endDate!)}'
-                        : 'c ${dateFormat.format(course.startDate)}',
+                        : 'from ${dateFormat.format(course.startDate)}',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: colorScheme.outline,
                         ),

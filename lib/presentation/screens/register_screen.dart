@@ -43,7 +43,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Регистрация')),
+      appBar: AppBar(title: const Text('Sign up')),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
@@ -69,12 +69,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         segments: const [
                           ButtonSegment(
                             value: 'teacher',
-                            label: Text('Учитель'),
+                            label: Text('Teacher'),
                             icon: Icon(Icons.school_outlined),
                           ),
                           ButtonSegment(
                             value: 'student',
-                            label: Text('Ученик'),
+                            label: Text('Student'),
                             icon: Icon(Icons.person_outlined),
                           ),
                         ],
@@ -87,12 +87,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       TextFormField(
                         controller: _firstNameController,
                         decoration: const InputDecoration(
-                          labelText: 'Имя',
+                          labelText: 'First name',
                           prefixIcon: Icon(Icons.person_outlined),
                         ),
                         validator: (v) {
                           if (v == null || v.trim().length < 2) {
-                            return 'Минимум 2 символа';
+                            return 'At least 2 characters';
                           }
                           return null;
                         },
@@ -101,12 +101,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       TextFormField(
                         controller: _lastNameController,
                         decoration: const InputDecoration(
-                          labelText: 'Фамилия',
+                          labelText: 'Last name',
                           prefixIcon: Icon(Icons.person_outlined),
                         ),
                         validator: (v) {
                           if (v == null || v.trim().length < 2) {
-                            return 'Минимум 2 символа';
+                            return 'At least 2 characters';
                           }
                           return null;
                         },
@@ -121,9 +121,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         keyboardType: TextInputType.emailAddress,
                         validator: (v) {
                           if (v == null || v.trim().isEmpty) {
-                            return 'Введите email';
+                            return 'Enter your email';
                           }
-                          if (!v.contains('@')) return 'Некорректный email';
+                          if (!v.contains('@')) return 'Invalid email';
                           return null;
                         },
                       ),
@@ -131,13 +131,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       TextFormField(
                         controller: _passwordController,
                         decoration: const InputDecoration(
-                          labelText: 'Пароль',
+                          labelText: 'Password',
                           prefixIcon: Icon(Icons.lock_outlined),
                         ),
                         obscureText: true,
                         validator: (v) {
                           if (v == null || v.length < 12) {
-                            return 'Минимум 12 символов';
+                            return 'At least 12 characters';
                           }
                           return null;
                         },
@@ -153,13 +153,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   strokeWidth: 2,
                                 ),
                               )
-                            : const Text('Зарегистрироваться'),
+                            : const Text('Sign up'),
                       ),
                       const SizedBox(height: 12),
                       TextButton(
                         onPressed:
                             isLoading ? null : () => context.go('/login'),
-                        child: const Text('Уже есть аккаунт? Войти'),
+                        child: const Text('Already have an account? Sign in'),
                       ),
                     ],
                   ),

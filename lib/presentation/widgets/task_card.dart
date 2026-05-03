@@ -41,7 +41,7 @@ class TaskCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      'До ${task.maxScore} баллов',
+                      'Up to ${task.maxScore} pts',
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
                             color: colorScheme.onSecondaryContainer,
                           ),
@@ -71,7 +71,7 @@ class TaskCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 6),
                   Text(
-                    'Дедлайн: ${dateFormat.format(task.deadline)}',
+                    'Deadline: ${dateFormat.format(task.deadline)}',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: isOverdue
                               ? colorScheme.error

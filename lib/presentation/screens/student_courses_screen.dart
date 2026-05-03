@@ -25,11 +25,11 @@ class _StudentCoursesScreenState extends State<StudentCoursesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Мои курсы'),
+        title: const Text('My courses'),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
-            tooltip: 'Выйти',
+            tooltip: 'Sign out',
             onPressed: () => context.read<AuthCubit>().logout(),
           ),
         ],
@@ -71,7 +71,7 @@ class _StudentCoursesScreenState extends State<StudentCoursesScreen> {
           }
         },
         icon: const Icon(Icons.add),
-        label: const Text('Присоединиться'),
+        label: const Text('Join'),
       ),
     );
   }
@@ -90,12 +90,12 @@ class _EmptyView extends StatelessWidget {
               size: 64, color: Theme.of(context).colorScheme.outline),
           const SizedBox(height: 16),
           Text(
-            'Вы пока не присоединились ни к одному курсу',
+            'You haven\'t joined any course yet',
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 8),
           Text(
-            'Введите код курса от преподавателя',
+            'Enter the course code from your teacher',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.outline,
                 ),
@@ -127,7 +127,7 @@ class _ErrorView extends StatelessWidget {
             const SizedBox(height: 16),
             FilledButton(
               onPressed: onRetry,
-              child: const Text('Повторить'),
+              child: const Text('Retry'),
             ),
           ],
         ),

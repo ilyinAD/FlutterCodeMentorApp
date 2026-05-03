@@ -50,7 +50,7 @@ class _StudentCourseDetailScreenState extends State<StudentCourseDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Курс')),
+      appBar: AppBar(title: const Text('Course')),
       body: FutureBuilder<_CourseDetail>(
         future: _future,
         builder: (context, snapshot) {
@@ -73,7 +73,7 @@ class _StudentCourseDetailScreenState extends State<StudentCourseDetailScreen> {
                   child: Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Text('Задачи',
+                    child: Text('Tasks',
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w600)),
                   ),
@@ -146,7 +146,7 @@ class _CourseInfo extends StatelessWidget {
               Text(
                 course.endDate != null
                     ? '${dateFormat.format(course.startDate)} — ${dateFormat.format(course.endDate!)}'
-                    : 'c ${dateFormat.format(course.startDate)}',
+                    : 'from ${dateFormat.format(course.startDate)}',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: colorScheme.outline,
                     ),
@@ -173,7 +173,7 @@ class _EmptyTasks extends StatelessWidget {
             Icon(Icons.assignment_outlined,
                 size: 48, color: Theme.of(context).colorScheme.outline),
             const SizedBox(height: 12),
-            Text('В курсе ещё нет задач',
+            Text('No tasks in this course yet',
                 style: Theme.of(context).textTheme.titleSmall),
           ],
         ),
@@ -201,7 +201,7 @@ class _ErrorView extends StatelessWidget {
             const SizedBox(height: 16),
             Text(message, textAlign: TextAlign.center),
             const SizedBox(height: 16),
-            FilledButton(onPressed: onRetry, child: const Text('Повторить')),
+            FilledButton(onPressed: onRetry, child: const Text('Retry')),
           ],
         ),
       ),

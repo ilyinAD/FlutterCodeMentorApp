@@ -52,8 +52,8 @@ class TaskRepository {
           .error;
     }
     if (e.type == DioExceptionType.connectionError) {
-      return 'Нет соединения с сервером.';
+      return 'No connection to the server.';
     }
-    return 'Произошла ошибка: ${e.message}';
+    return 'An error occurred: ${e.message}';
   }
 }

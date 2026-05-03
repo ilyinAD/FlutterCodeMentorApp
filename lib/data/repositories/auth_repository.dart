@@ -87,11 +87,11 @@ class AuthRepository {
       case DioExceptionType.connectionTimeout:
       case DioExceptionType.sendTimeout:
       case DioExceptionType.receiveTimeout:
-        return 'Сервер не отвечает. Попробуйте позже.';
+        return 'Server is not responding. Try again later.';
       case DioExceptionType.connectionError:
-        return 'Нет соединения с сервером.';
+        return 'No connection to the server.';
       default:
-        return 'Произошла ошибка: ${e.message}';
+        return 'An error occurred: ${e.message}';
     }
   }
 }

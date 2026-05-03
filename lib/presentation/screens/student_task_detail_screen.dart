@@ -58,7 +58,7 @@ class _StudentTaskDetailViewState extends State<_StudentTaskDetailView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Задача')),
+      appBar: AppBar(title: const Text('Task')),
       body: RefreshIndicator(
         onRefresh: _refresh,
         child: ListView(
@@ -88,7 +88,7 @@ class _StudentTaskDetailViewState extends State<_StudentTaskDetailView> {
                       padding:
                           EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                       child: Text(
-                        'Критерии оценки',
+                        'Grading criteria',
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w600),
                       ),
@@ -102,7 +102,7 @@ class _StudentTaskDetailViewState extends State<_StudentTaskDetailView> {
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               child: Text(
-                'Мои посылки',
+                'My submissions',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
             ),
@@ -143,7 +143,7 @@ class _StudentTaskDetailViewState extends State<_StudentTaskDetailView> {
           }
         },
         icon: const Icon(Icons.upload_file),
-        label: const Text('Отправить решение'),
+        label: const Text('Submit solution'),
       ),
     );
   }
@@ -185,7 +185,7 @@ class _TaskInfo extends StatelessWidget {
               ),
               const SizedBox(width: 6),
               Text(
-                'Дедлайн: ${dateFormat.format(task.deadline)}',
+                'Deadline: ${dateFormat.format(task.deadline)}',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color:
                           isOverdue ? colorScheme.error : colorScheme.outline,
@@ -200,7 +200,7 @@ class _TaskInfo extends StatelessWidget {
                   size: 16, color: colorScheme.outline),
               const SizedBox(width: 6),
               Text(
-                'Максимум ${task.maxScore} баллов',
+                'Max score: ${task.maxScore}',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: colorScheme.outline,
                     ),
@@ -222,7 +222,7 @@ class _EmptySubmissions extends StatelessWidget {
       padding: const EdgeInsets.all(24),
       child: Center(
         child: Text(
-          'Вы ещё не отправляли решения',
+          'You have not submitted any solutions yet',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Theme.of(context).colorScheme.outline,
               ),

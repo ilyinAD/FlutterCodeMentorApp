@@ -49,7 +49,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
     if (!_formKey.currentState!.validate()) return;
     if (_deadline == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Выберите дедлайн')),
+        const SnackBar(content: Text('Select a deadline')),
       );
       return;
     }

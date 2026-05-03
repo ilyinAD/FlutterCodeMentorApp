@@ -13,7 +13,7 @@ class JoinCourseCubit extends Cubit<JoinCourseState> {
   Future<void> join(int courseId) async {
     final user = _authRepository.getCurrentUser();
     if (user == null) {
-      emit(const JoinCourseError('Вы не авторизованы'));
+      emit(const JoinCourseError('You are not signed in'));
       return;
     }
     emit(const JoinCourseSubmitting());

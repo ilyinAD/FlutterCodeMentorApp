@@ -13,7 +13,7 @@ class StudentCoursesCubit extends Cubit<StudentCoursesState> {
   Future<void> load() async {
     final user = _authRepository.getCurrentUser();
     if (user == null) {
-      emit(const StudentCoursesError('Вы не авторизованы'));
+      emit(const StudentCoursesError('You are not signed in'));
       return;
     }
     emit(const StudentCoursesLoading());

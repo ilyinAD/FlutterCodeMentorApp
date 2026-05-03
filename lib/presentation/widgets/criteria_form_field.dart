@@ -66,25 +66,25 @@ class _CriteriaFormFieldState extends State<CriteriaFormField> {
               children: [
                 Expanded(
                   child: Text(
-                    'Критерий ${widget.index + 1}',
+                    'Criterion ${widget.index + 1}',
                     style: Theme.of(context).textTheme.titleSmall,
                   ),
                 ),
                 IconButton(
                   icon: const Icon(Icons.delete_outline),
                   onPressed: widget.onRemove,
-                  tooltip: 'Удалить',
+                  tooltip: 'Remove',
                 ),
               ],
             ),
             const SizedBox(height: 8),
             TextFormField(
               controller: _nameController,
-              decoration: const InputDecoration(labelText: 'Название'),
+              decoration: const InputDecoration(labelText: 'Name'),
               onChanged: (v) => _emit(name: v),
               validator: (v) {
                 if (v == null || v.trim().length < 3) {
-                  return 'Минимум 3 символа';
+                  return 'At least 3 characters';
                 }
                 return null;
               },
@@ -93,14 +93,14 @@ class _CriteriaFormFieldState extends State<CriteriaFormField> {
             TextFormField(
               controller: _descriptionController,
               decoration: const InputDecoration(
-                labelText: 'Описание',
+                labelText: 'Description',
                 alignLabelWithHint: true,
               ),
               maxLines: 2,
               onChanged: (v) => _emit(description: v),
               validator: (v) {
                 if (v == null || v.trim().length < 10) {
-                  return 'Минимум 10 символов';
+                  return 'At least 10 characters';
                 }
                 return null;
               },
@@ -112,7 +112,7 @@ class _CriteriaFormFieldState extends State<CriteriaFormField> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Вес: ${widget.criterion.weight}',
+                      Text('Weight: ${widget.criterion.weight}',
                           style: Theme.of(context).textTheme.labelMedium),
                       Slider(
                         value: widget.criterion.weight.toDouble(),
@@ -128,7 +128,7 @@ class _CriteriaFormFieldState extends State<CriteriaFormField> {
                 const SizedBox(width: 8),
                 Column(
                   children: [
-                    const Text('Обязательный'),
+                    const Text('Mandatory'),
                     Switch(
                       value: widget.criterion.isMandatory,
                       onChanged: (v) => _emit(isMandatory: v),

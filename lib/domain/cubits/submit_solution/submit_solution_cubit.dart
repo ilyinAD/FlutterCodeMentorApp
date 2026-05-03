@@ -18,7 +18,7 @@ class SubmitSolutionCubit extends Cubit<SubmitSolutionState> {
   }) async {
     final user = _authRepository.getCurrentUser();
     if (user == null) {
-      emit(const SubmitSolutionError('Вы не авторизованы'));
+      emit(const SubmitSolutionError('You are not signed in'));
       return;
     }
     emit(const SubmitSolutionSubmitting());

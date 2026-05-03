@@ -39,7 +39,7 @@ class _SubmissionsScreenState extends State<SubmissionsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Задача и посылки')),
+      appBar: AppBar(title: const Text('Task and submissions')),
       body: RefreshIndicator(
         onRefresh: _refresh,
         child: ListView(
@@ -69,7 +69,7 @@ class _SubmissionsScreenState extends State<SubmissionsScreen> {
                       padding:
                           EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                       child: Text(
-                        'Критерии оценки',
+                        'Grading criteria',
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w600),
                       ),
@@ -83,7 +83,7 @@ class _SubmissionsScreenState extends State<SubmissionsScreen> {
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               child: Text(
-                'Посылки',
+                'Submissions',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
             ),
@@ -103,7 +103,7 @@ class _SubmissionsScreenState extends State<SubmissionsScreen> {
                           FilledButton(
                             onPressed: () =>
                                 context.read<SubmissionsCubit>().load(),
-                            child: const Text('Повторить'),
+                            child: const Text('Retry'),
                           ),
                         ],
                       ),
@@ -171,7 +171,7 @@ class _TaskInfo extends StatelessWidget {
               ),
               const SizedBox(width: 6),
               Text(
-                'Дедлайн: ${dateFormat.format(task.deadline)}',
+                'Deadline: ${dateFormat.format(task.deadline)}',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color:
                           isOverdue ? colorScheme.error : colorScheme.outline,
@@ -185,7 +185,7 @@ class _TaskInfo extends StatelessWidget {
               Icon(Icons.star_outline, size: 16, color: colorScheme.outline),
               const SizedBox(width: 6),
               Text(
-                'Максимум ${task.maxScore} баллов',
+                'Max score: ${task.maxScore}',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: colorScheme.outline,
                     ),
@@ -212,7 +212,7 @@ class _EmptyView extends StatelessWidget {
             Icon(Icons.inbox_outlined,
                 size: 48, color: Theme.of(context).colorScheme.outline),
             const SizedBox(height: 12),
-            Text('Посылок пока нет',
+            Text('No submissions yet',
                 style: Theme.of(context).textTheme.titleSmall),
           ],
         ),

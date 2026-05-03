@@ -14,7 +14,7 @@ class CriteriaList extends StatelessWidget {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Text(
-          'Критерии не заданы',
+          'No criteria specified',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Theme.of(context).colorScheme.outline,
               ),
@@ -64,7 +64,7 @@ class _CriterionCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    'Вес ${criterion.weight}',
+                    'Weight ${criterion.weight}',
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
                           color: colorScheme.onSecondaryContainer,
                         ),
@@ -80,7 +80,7 @@ class _CriterionCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      'Обязательный',
+                      'Mandatory',
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
                             color: colorScheme.onErrorContainer,
                           ),

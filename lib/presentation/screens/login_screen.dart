@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Вход для учителей и учеников',
+                        'Sign in for teachers and students',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               color: Theme.of(context).colorScheme.outline,
                             ),
@@ -79,9 +79,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         keyboardType: TextInputType.emailAddress,
                         validator: (v) {
                           if (v == null || v.trim().isEmpty) {
-                            return 'Введите email';
+                            return 'Enter your email';
                           }
-                          if (!v.contains('@')) return 'Некорректный email';
+                          if (!v.contains('@')) return 'Invalid email';
                           return null;
                         },
                       ),
@@ -89,12 +89,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       TextFormField(
                         controller: _passwordController,
                         decoration: const InputDecoration(
-                          labelText: 'Пароль',
+                          labelText: 'Password',
                           prefixIcon: Icon(Icons.lock_outlined),
                         ),
                         obscureText: true,
                         validator: (v) {
-                          if (v == null || v.isEmpty) return 'Введите пароль';
+                          if (v == null || v.isEmpty) return 'Enter your password';
                           return null;
                         },
                       ),
@@ -109,13 +109,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                   strokeWidth: 2,
                                 ),
                               )
-                            : const Text('Войти'),
+                            : const Text('Sign in'),
                       ),
                       const SizedBox(height: 12),
                       TextButton(
                         onPressed:
                             isLoading ? null : () => context.go('/register'),
-                        child: const Text('Создать аккаунт'),
+                        child: const Text('Create account'),
                       ),
                     ],
                   ),

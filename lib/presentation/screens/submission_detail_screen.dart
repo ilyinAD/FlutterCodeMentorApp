@@ -33,7 +33,7 @@ class _SubmissionDetailScreenState extends State<SubmissionDetailScreen> {
         context.read<AuthRepository>().getCurrentUser()?.role == 'student';
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Посылка')),
+      appBar: AppBar(title: const Text('Submission')),
       body:
           BlocConsumer<SubmissionDetailCubit, SubmissionDetailState>(
         listener: (context, state) {
@@ -84,7 +84,7 @@ class _SubmissionDetailScreenState extends State<SubmissionDetailScreen> {
                           children: [
                             Icon(Icons.info_outline),
                             SizedBox(width: 8),
-                            Expanded(child: Text('AI-ревью ещё не готово')),
+                            Expanded(child: Text('AI review is not ready yet')),
                           ],
                         ),
                       ),
@@ -289,7 +289,7 @@ class _StudentGradeView extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
-                  'Итоговая оценка',
+                  'Final grade',
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
@@ -338,7 +338,7 @@ class _ReviewSection extends StatelessWidget {
                     children: [
                       Icon(Icons.psychology, color: cs.primary),
                       const SizedBox(width: 8),
-                      Text('AI-ревью',
+                      Text('AI review',
                           style: Theme.of(context).textTheme.titleMedium),
                       const Spacer(),
                       Container(
@@ -366,9 +366,9 @@ class _ReviewSection extends StatelessWidget {
                     const SizedBox(height: 8),
                     Text(
                       [
-                        if (review.aiModel != null) 'Модель: ${review.aiModel}',
+                        if (review.aiModel != null) 'Model: ${review.aiModel}',
                         if (review.aiConfidence != null)
-                          'Уверенность: ${(review.aiConfidence! * 100).toStringAsFixed(0)}%',
+                          'Confidence: ${(review.aiConfidence! * 100).toStringAsFixed(0)}%',
                       ].join(' · '),
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: cs.outline,
@@ -389,7 +389,7 @@ class _ReviewSection extends StatelessWidget {
           if (visibleFeedbacks.isEmpty) {
             return const Padding(
               padding: EdgeInsets.all(16),
-              child: Text('Замечаний нет'),
+              child: Text('No comments'),
             );
           }
           return Column(
@@ -445,7 +445,7 @@ class _ReviewSection extends StatelessWidget {
                           );
                     },
               icon: const Icon(Icons.add_comment_outlined),
-              label: const Text('Добавить свой фидбек'),
+              label: const Text('Add custom feedback'),
             ),
           ),
       ],
@@ -463,10 +463,10 @@ class _ReviewSection extends StatelessWidget {
 
   String _overallLabel(String status) {
     return switch (status) {
-      'passed' => 'Принято',
-      'needs_improvement' => 'Требует доработки',
-      'failed' => 'Не принято',
-      'pending' => 'В процессе',
+      'passed' => 'Passed',
+      'needs_improvement' => 'Needs improvement',
+      'failed' => 'Failed',
+      'pending' => 'In progress',
       _ => status,
     };
   }
@@ -517,12 +517,12 @@ class _GradeSectionState extends State<_GradeSection> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text('Итоговая оценка',
+              Text('Final grade',
                   style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 12),
               TextField(
                 controller: _controller,
-                decoration: const InputDecoration(labelText: 'Балл'),
+                decoration: const InputDecoration(labelText: 'Score'),
                 keyboardType:
                     const TextInputType.numberWithOptions(decimal: true),
               ),
@@ -536,7 +536,7 @@ class _GradeSectionState extends State<_GradeSection> {
                         if (grade == null || grade < 0) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                                content: Text('Введите корректный балл')),
+                                content: Text('Enter a valid score')),
                           );
                           return;
                         }
@@ -550,7 +550,7 @@ class _GradeSectionState extends State<_GradeSection> {
                         width: 20,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : const Text('Выставить оценку'),
+                    : const Text('Submit grade'),
               ),
             ],
           ),
@@ -579,7 +579,7 @@ class _ErrorView extends StatelessWidget {
             const SizedBox(height: 16),
             Text(message, textAlign: TextAlign.center),
             const SizedBox(height: 16),
-            FilledButton(onPressed: onRetry, child: const Text('Повторить')),
+            FilledButton(onPressed: onRetry, child: const Text('Retry')),
           ],
         ),
       ),

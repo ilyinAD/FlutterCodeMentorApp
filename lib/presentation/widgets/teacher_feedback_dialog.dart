@@ -30,12 +30,12 @@ class TeacherFeedbackDialog extends StatefulWidget {
 }
 
 const _feedbackTypes = [
-  ('critical_error', 'Критическая ошибка'),
-  ('logic_error', 'Ошибка логики'),
-  ('style_issue', 'Стиль кода'),
-  ('performance', 'Производительность'),
-  ('security_risk', 'Безопасность'),
-  ('improvement', 'Улучшение'),
+  ('critical_error', 'Critical error'),
+  ('logic_error', 'Logic error'),
+  ('style_issue', 'Code style'),
+  ('performance', 'Performance'),
+  ('security_risk', 'Security'),
+  ('improvement', 'Improvement'),
 ];
 
 class _TeacherFeedbackDialogState extends State<TeacherFeedbackDialog> {
@@ -85,7 +85,7 @@ class _TeacherFeedbackDialogState extends State<TeacherFeedbackDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Новый фидбек'),
+      title: const Text('New feedback'),
       content: SizedBox(
         width: 500,
         child: SingleChildScrollView(
@@ -98,19 +98,19 @@ class _TeacherFeedbackDialogState extends State<TeacherFeedbackDialog> {
                 TextFormField(
                   controller: _descriptionController,
                   decoration: const InputDecoration(
-                    labelText: 'Описание замечания',
+                    labelText: 'Description',
                     alignLabelWithHint: true,
                   ),
                   maxLines: 3,
                   validator: (v) {
                     if (v == null || v.trim().isEmpty) {
-                      return 'Введите описание';
+                      return 'Enter description';
                     }
                     return null;
                   },
                 ),
                 const SizedBox(height: 12),
-                Text('Серьёзность: $_severity',
+                Text('Severity: $_severity',
                     style: Theme.of(context).textTheme.labelMedium),
                 Slider(
                   value: _severity.toDouble(),
@@ -123,7 +123,7 @@ class _TeacherFeedbackDialogState extends State<TeacherFeedbackDialog> {
                 const SizedBox(height: 12),
                 DropdownButtonFormField<String>(
                   initialValue: _feedbackType,
-                  decoration: const InputDecoration(labelText: 'Тип'),
+                  decoration: const InputDecoration(labelText: 'Type'),
                   items: _feedbackTypes
                       .map((t) => DropdownMenuItem(
                             value: t.$1,
@@ -138,7 +138,7 @@ class _TeacherFeedbackDialogState extends State<TeacherFeedbackDialog> {
                 TextFormField(
                   controller: _filePathController,
                   decoration:
-                      const InputDecoration(labelText: 'Путь к файлу'),
+                      const InputDecoration(labelText: 'File path'),
                 ),
                 const SizedBox(height: 12),
                 Row(
@@ -147,7 +147,7 @@ class _TeacherFeedbackDialogState extends State<TeacherFeedbackDialog> {
                       child: TextFormField(
                         controller: _lineStartController,
                         decoration:
-                            const InputDecoration(labelText: 'Строка (от)'),
+                            const InputDecoration(labelText: 'Line (from)'),
                         keyboardType: TextInputType.number,
                       ),
                     ),
@@ -156,7 +156,7 @@ class _TeacherFeedbackDialogState extends State<TeacherFeedbackDialog> {
                       child: TextFormField(
                         controller: _lineEndController,
                         decoration:
-                            const InputDecoration(labelText: 'Строка (до)'),
+                            const InputDecoration(labelText: 'Line (to)'),
                         keyboardType: TextInputType.number,
                       ),
                     ),
@@ -166,7 +166,7 @@ class _TeacherFeedbackDialogState extends State<TeacherFeedbackDialog> {
                 TextFormField(
                   controller: _codeSnippetController,
                   decoration: const InputDecoration(
-                    labelText: 'Фрагмент кода',
+                    labelText: 'Code snippet',
                     alignLabelWithHint: true,
                   ),
                   maxLines: 3,
@@ -176,7 +176,7 @@ class _TeacherFeedbackDialogState extends State<TeacherFeedbackDialog> {
                 TextFormField(
                   controller: _suggestedFixController,
                   decoration: const InputDecoration(
-                    labelText: 'Предлагаемое исправление',
+                    labelText: 'Suggested fix',
                     alignLabelWithHint: true,
                   ),
                   maxLines: 3,
@@ -190,20 +190,20 @@ class _TeacherFeedbackDialogState extends State<TeacherFeedbackDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Отмена'),
+          child: const Text('Cancel'),
         ),
-        FilledButton(onPressed: _submit, child: const Text('Добавить')),
+        FilledButton(onPressed: _submit, child: const Text('Add')),
       ],
     );
   }
 
   String _severityLabel(int severity) {
     return switch (severity) {
-      1 => 'Инфо',
-      2 => 'Низкая',
-      3 => 'Средняя',
-      4 => 'Высокая',
-      5 => 'Критическая',
+      1 => 'Info',
+      2 => 'Low',
+      3 => 'Medium',
+      4 => 'High',
+      5 => 'Critical',
       _ => '$severity',
     };
   }
